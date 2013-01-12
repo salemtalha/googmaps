@@ -6,7 +6,6 @@ def sanitize(sentence):
   return result
 
 def print_path(url):
-  print url
   resp = requests.get(url)
   myjson= simplejson.loads(resp.text)
   keypoints = myjson['routes'][0]['legs'][0]

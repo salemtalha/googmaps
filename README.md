@@ -9,6 +9,7 @@ FEATURES
 - Ability to specify desired mode of transport (biking, transit, driving)
 - Option to avoid roads and tolls
 - Linking to actual page in case you wanna look at a map
+- Pretty printing, with some colors
 
 
 EXAMPLE
