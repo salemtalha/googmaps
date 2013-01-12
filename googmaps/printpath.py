@@ -8,6 +8,15 @@ def sanitize(sentence):
 def print_path(url):
   resp = requests.get(url)
   myjson= simplejson.loads(resp.text)
+
+  if resp.status_code != 200: 
+    print "Sorry, something went wrong"
+    sys.exit()
+  else:
+    if myjson['status'] == "ZERO_RESULTS":
+      print "Your query returned no results"
+      sys.exit()
+
   keypoints = myjson['routes'][0]['legs'][0]
 
   print "From: " + keypoints['start_address']
