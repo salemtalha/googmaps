@@ -1,17 +1,19 @@
 Googmaps : Command line client for Google Maps
 =============
 
-Quick project I put together using the Google Maps API to quickly grab directions. I will be adding more features as time goes on
+Quick project I put together using the Google Maps API to grab directions. I will be probably be adding more features as time goes on
 
 FEATURES
 -------------
 - Natural language support for departure/arrival times
 - Ability to specify desired mode of transport (biking, transit, driving)
-- Option to avoid roads
+- Option to avoid roads and tolls
 - Linking to actual page in case you wanna look at a map
 
-More to come..
 
+EXAMPLE
+-------
+./main.py -m transit -d "tomorrow evening" -u metric "123 Your House, Toronto ON" "4567 Your Mom's House, Waterloo, ON" 
 
 USAGE:
 --------
