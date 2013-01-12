@@ -14,7 +14,7 @@ FEATURES
 
 EXAMPLE
 -------
-./main.py -m transit -d "tomorrow evening" -u metric "123 Your House, Toronto ON" "4567 Your Mom's House, Waterloo, ON" 
+./map.py -m transit -d "tomorrow evening" -u metric "123 Your House, Toronto ON" "4567 Your Mom's House, Waterloo, ON" 
 
 USAGE:
 --------
