@@ -1,7 +1,7 @@
 Googmaps : Command line client for Google Maps
 =============
 
-Quick project I put together using the Google Maps API to grab directions. I will be probably be adding more features as time goes on
+Quick project I put together using the Google Maps API to grab directions in text form. I will be probably be adding more features as time goes on
 
 FEATURES
 -------------
