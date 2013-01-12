@@ -12,15 +12,14 @@ FEATURES
 
 More to come..
 
-Usage: main.py [options] origin destination
 
-OPTIONS:
+USAGE:
 --------
-  *-h, --help show this help message and exit
-  *-m MODE, --mode=MODE specifies type of transportation desired
-  *-u UNITS, --units=UNITS specifies choice between metric and imperial systems
-  *-s SENSOR, --sensor=SENSOR
-  *-a ARRIVAL_TIME, --arrival=ARRIVAL_TIME         specifies desired time of arrival. can be stated in natural language
-  *-d DEPARTURE_TIME, --departure=DEPARTURE_TIME   specifies desired time of departure, can be stated in natural language
-  *-e AVOID, --evade=AVOID                         specifies choice in avoiding tolls or highways
+main.py [options] origin destination
+  * -h, --help 
+  * -m MODE, --mode=MODE                            specifies type of transportation desired
+  * -u UNITS, --units=UNITS                         specifies choice between metric and imperial systems
+  * -a ARRIVAL_TIME, --arrival=ARRIVAL_TIME         specifies desired time of arrival. can be stated in natural language
+  * -d DEPARTURE_TIME, --departure=DEPARTURE_TIME   specifies desired time of departure, can be stated in natural language
+  * -e AVOID, --evade=AVOID                         specifies choice in avoiding tolls or highways
 
