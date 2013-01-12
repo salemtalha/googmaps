@@ -1,10 +1,9 @@
-import requests, simplejson, re
+import requests, simplejson, re, sys
 from termcolor import colored, cprint
 
 def sanitize(sentence):
   result = re.sub('<.*?>', '', sentence.encode('ascii', 'ignore'))
   return result
-
 
 def print_path(url):
   print url
@@ -30,6 +29,7 @@ def print_path(url):
     instruction = sanitize(step['html_instructions'])
     #fix for formatting issue on last line of instructions
     instruction = re.sub('Destination', '. Destination', instruction)
-    print str(linenum) + '. ' + instruction
+    sys.stdout.write(str(linenum) + '. ' + instruction + ' for ') 
+    cprint(step['duration']['text'], 'green')
     linenum += 1
 
