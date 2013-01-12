@@ -32,3 +32,4 @@ def print_path(url):
     cprint(step['duration']['text'], 'green')
     linenum += 1
 
+  #TODO: add shit for how long peeps is gonna wait at each stop for transit
