@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import sys, requests, re, simplejson
 from optparse import OptionParser
-from getpath import make_url
-from printpath import print_path
 from termcolor import colored, cprint
 from time import mktime
 import parsedatetime.parsedatetime as pdt
@@ -26,14 +24,9 @@ def main():
   make_url(parser, options, args)
 
 def make_url(parser, options, args):
+  checkinput(options)
+
   url_end = ''
-
-  if(options.mode == "transit" and not (options.departure_time or options.arrival_time)):
-    parser.error("Can't specify transit without either arrival or departure time")
-  else:
-    if options.avoid not in ["tolls", "highways", None]:
-      parser.error("Must specify either tolls or highways to evade")
-
   cal = pdt.Calendar()
 
   for key,value in options.__dict__.items():
@@ -53,21 +46,12 @@ def make_url(parser, options, args):
   url = (base_url + url_end)[:-1]
   print_path(url)
 
-def sanitize(sentence):
-  result = re.sub('<.*?>', '', sentence.encode('ascii', 'ignore'))
-  return result
 
 def print_path(url):
+  print url
   resp = requests.get(url)
   myjson= simplejson.loads(resp.text)
-
-  if resp.status_code != 200: 
-    print "Sorry, something went wrong"
-    sys.exit()
-  else:
-    if myjson['status'] == "ZERO_RESULTS":
-      print "Your query returned no results"
-      sys.exit()
+  checkresp(myjson, resp)
 
   keypoints = myjson['routes'][0]['legs'][0]
 
@@ -76,14 +60,11 @@ def print_path(url):
   print "Distance: " + keypoints['distance']['text']
   print "Duration: " + keypoints['duration']['text'] 
 
-  warnings = myjson['routes'][0]['warnings']
-  if warnings:
-    cprint ("\nWarnings:", 'red')
-    for warning in warnings:
-      cprint ("- " + sanitize(warning), 'red')
-
-  print "\n"
+  printwarnings(myjson)
   
+  if 'mode=transit' in url:
+    print keypoints['departure_time']['text'] + ' to ' + keypoints['arrival_time']['text']
+
   steps, linenum = keypoints['steps'], 1
   for step in steps:
     instruction = sanitize(step['html_instructions'])
@@ -94,5 +75,32 @@ def print_path(url):
     linenum += 1
 
   #TODO: add shit for how long peeps is gonna wait at each stop for transit
+
+def sanitize(sentence):
+  result = re.sub('<.*?>', '', sentence.encode('ascii', 'ignore'))
+  return result
+
+def checkinput(options):
+  if(options.mode == "transit" and not (options.departure_time or options.arrival_time)):
+    parser.error("Can't specify transit without either arrival or departure time")
+  elif options.avoid not in ["tolls", "highways", None]:
+      parser.error("Must specify either tolls or highways to evade")
+
+def checkresp(myjson, resp):
+  if resp.status_code != 200: 
+    print "Sorry, something went wrong"
+    sys.exit()
+  else:
+    if myjson['status'] == "ZERO_RESULTS":
+      print "Your query returned no results"
+      sys.exit()
+
+def printwarnings(myjson):
+  warnings = myjson['routes'][0]['warnings']
+  if warnings:
+    cprint ("\nWarnings:", 'red')
+    for warning in warnings:
+      cprint ("- " + sanitize(warning), 'red')
+  print "\n"
 
 main()
