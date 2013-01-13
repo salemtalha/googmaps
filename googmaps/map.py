@@ -48,7 +48,6 @@ def make_url(parser, options, args):
 
 
 def print_path(url):
-  print url
   resp = requests.get(url)
   myjson= simplejson.loads(resp.text)
   checkresp(myjson, resp)
@@ -92,7 +91,7 @@ def checkresp(myjson, resp):
     sys.exit()
   else:
     if myjson['status'] == "ZERO_RESULTS":
-      print "Your query returned no results"
+      print "Your query returned no results. Try ^ that link maybe?"
       sys.exit()
 
 def printwarnings(myjson):
