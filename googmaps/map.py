@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-import sys, requests, re, simplejson
+import sys
+import requests
+import re
+import simplejson
 from optparse import OptionParser
 from termcolor import colored, cprint
 from time import mktime
@@ -22,6 +25,7 @@ def main():
   if len(args) != 3:
     parser.error("Incorrect number")
   make_url(parser, options, args)
+
 
 def make_url(parser, options, args):
   checkinput(options)
@@ -49,17 +53,17 @@ def make_url(parser, options, args):
 
 def print_path(url):
   resp = requests.get(url)
-  myjson= simplejson.loads(resp.text)
-  checkresp(myjson, resp)
+  respjson= simplejson.loads(resp.text)
+  checkresp(respjson, resp)
 
-  keypoints = myjson['routes'][0]['legs'][0]
+  keypoints = respjson['routes'][0]['legs'][0]
 
   print "From: " + keypoints['start_address']
   print "To: " + keypoints['end_address']
   print "Distance: " + keypoints['distance']['text']
   print "Duration: " + keypoints['duration']['text'] 
 
-  printwarnings(myjson)
+  printwarnings(respjson)
   
   if 'mode=transit' in url:
     print keypoints['departure_time']['text'] + ' to ' + keypoints['arrival_time']['text']
@@ -73,11 +77,11 @@ def print_path(url):
     cprint(step['duration']['text'], 'green')
     linenum += 1
 
-  #TODO: add shit for how long peeps is gonna wait at each stop for transit
 
 def sanitize(sentence):
   result = re.sub('<.*?>', '', sentence.encode('ascii', 'ignore'))
   return result
+
 
 def checkinput(options):
   if(options.mode == "transit" and not (options.departure_time or options.arrival_time)):
@@ -85,21 +89,40 @@ def checkinput(options):
   elif options.avoid not in ["tolls", "highways", None]:
       parser.error("Must specify either tolls or highways to evade")
 
-def checkresp(myjson, resp):
+
+def checkresp(respjson, resp):
   if resp.status_code != 200: 
-    print "Sorry, something went wrong"
+    print "Sorry, something went wrong. Here is the output:"
+    print resp.text
     sys.exit()
-  else:
-    if myjson['status'] == "ZERO_RESULTS":
+  elif respjson['status'] == "ZERO_RESULTS":
       print "Your query returned no results. Try ^ that link maybe?"
       sys.exit()
 
-def printwarnings(myjson):
-  warnings = myjson['routes'][0]['warnings']
+  try:
+    respjson['routes']
+  except KeyError:
+    print "Bad Key"
+
+  try: 
+    respjson['routes'][0]
+  except IndexError:
+    print "Index out of range"
+  except TypeError:
+    print "Bad index type"
+
+  try:
+    respjson['routes'][0]['legs']
+  except KeyError:
+    print "Bad Key"
+
+
+def printwarnings(respjson):
+  warnings = respjson['routes'][0]['warnings']
   if warnings:
     cprint ("\nWarnings:", 'red')
     for warning in warnings:
       cprint ("- " + sanitize(warning), 'red')
-  print "\n"
+
 
 main()
