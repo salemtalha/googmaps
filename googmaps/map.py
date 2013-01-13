@@ -102,7 +102,7 @@ def checkresp(respjson, resp):
   try:
     respjson['routes']
   except KeyError:
-    print "Bad Key"
+    print "No 'routes' in response"
 
   try: 
     respjson['routes'][0]
